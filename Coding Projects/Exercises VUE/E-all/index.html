@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<style>
+
+</style>
+</head>
+<body>
+  <div id = "testFirst"> {{ firstTest }} </div>
+
+<script>
+    window.addEventListener("load", function(){
+      new Vue ({
+      el: "#testFirst",
+      data: {
+        firstTest: "No SR, sad",
+      }
+    });
+  });
+</script>
+</body>
+</html>

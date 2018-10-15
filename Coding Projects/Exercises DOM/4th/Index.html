@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    .hacked {
+        background-color: aqua;
+    }
+    .reacted {
+        background-color: black;
+        color: aliceblue;
+    }
+</style>
+</head>
+<body>
+<button id = "btn" class = "hacked">Will it be</button>
+
+<script>
+    let button = document.getElementById("btn");
+    button.addEventListener("click", function(event){
+        if (button.className == "hacked"){
+            button.className = "reacted";
+        }
+        else if (button.className == "reacted"){
+            button.className = "hacked";
+        }
+    })
+</script>
+</body>
+</html>

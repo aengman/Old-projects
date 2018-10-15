@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    body {
+        background: linear-gradient(to right, red, black)
+    }
+    #inputForm {
+        position: absolute;
+        right: 0px;
+        width: 200px;
+        top: 0px;
+    }
+    #container {
+        width: 200px;
+    }
+    .con1 * {
+        background-color: lightgrey;
+        border: solid 1px black
+    }
+    .removeBtn {
+        position: relative;
+        left: 81px;
+    }
+    .movieDiv {
+        margin: 8px;
+    }
+    #Filter * {
+        display: block;
+    }
+    #Filter {
+        position: absolute;
+        top: 0px;
+        left: 210px;
+    }
+    button {
+        background-color: lightgoldenrodyellow;
+    }
+    .edit {
+        visibility: hidden;
+    }
+</style>
+    
+<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCC6lkhk7fljLhUUPl5FLDEbTutOpclKnY",
+    authDomain: "demolition-38d2b.firebaseapp.com",
+    databaseURL: "https://demolition-38d2b.firebaseio.com",
+    projectId: "demolition-38d2b",
+    storageBucket: "demolition-38d2b.appspot.com",
+    messagingSenderId: "451483860928"
+  };
+  firebase.initializeApp(config);
+</script>
+</head>
+<body>
+    <div id = "container">
+        <div class = "con1">
+           <!-- <div class = "movieDiv">
+                <div class = "titleDiv"> Kuroi Tsubasa wa Muteki </div>
+                <div class = "producerDiv"> Jack Meadow </div>
+                <div class = "yearDiv"> 1996 </div>
+                <div class = "picDiv"> </div>
+                <button class = "editBtn">Edit</button>
+                <button class = "removeBtn">Remove</button>
+            </div> -->
+        </div>
+    </div>
+    <div id = "inputForm">
+        <input type = "text" id = "inTitle" placeholder = "Title">
+        <input type = "text" id = "inProducer" placeholder = "Producer">
+        <input type = "text" id = "inYear" placeholder = "Production year">
+        <button class = "inBtn">Insert</button>
+    </div>
+    <div id = "pages">
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button>...</button>
+    </div>
+    <div id = "Filter">
+        <input type = "text" id = "inFilter" placeholder = "Search or leave empty">
+        <select>
+            <option value = "Title">Title</option>
+            <option value = "Producer">Producer</option>
+            <option value = "Year">Year</option>
+        </select>
+        <select>
+            <option value = "Descending">Descending</option>
+            <option value = "Ascending">Ascending</option>
+        </select>
+        <button class = "filter">Filter</button>
+    </div>
+    <div class = "edit">
+        <input type = "text" placeholder = "Title">
+        <input type = "text" placeholder = "Producer">
+        <input type = "text" placeholder = "Production year">
+        <button>Finalize</button>
+    </div>
+    
+    
+<script>
+    let db = firebase.database();
+    let inBtn = document.getElementsByClassName("inBtn")[0];
+    let con1 = document.getElementsByClassName("con1")[0];
+    let movieArray = [];
+    let filtButton = document.getElementsByClassName("filter")[0];
+    let pages = document.getElementById("pages");
+    let tempArray = [];
+    
+    /*let pageHandler = function(variable){
+        var count = 0;
+        for (i = 0; i < pages.children.length - 1; i++){
+            pages.children[i].addEventListener("click", function(event){
+                let tempArray = movieArray.slice(0);
+                clearCon1();
+                console.log(count);
+                tempArray.splice(count , 5);
+                console.log(tempArray);
+                tempArray.forEach(filterBuild);
+            })
+            count += 4;
+        }
+    }*/
+    
+    filtButton.addEventListener("click", function(event){
+        let selector = document.getElementsByTagName("select")[0];
+        let filter = document.getElementById("inFilter");
+        tempArray = movieArray.slice(0);
+        
+        if (selector.children[0].selected == true){
+            console.log(tempArray);
+            console.log("title selected");
+            movieArray.sort(sortTitle);
+            tempArray = movieArray.slice(0);
+            if (filter.value != ""){
+                tempArray = tempArray.filter(function(obj){
+                    return obj.title.toLowerCase().indexOf(filter.value.toLowerCase())>-1;
+                });
+            }
+            console.log(tempArray);
+            reverseSelect(tempArray);
+            clearCon1();
+            tempArray.forEach(filterBuild);
+        }
+        if (selector.children[1].selected == true){
+            console.log("producer selected");
+            movieArray.sort(sortProducer);
+            tempArray = movieArray.slice(0);
+            if (filter.value != ""){
+                tempArray = tempArray.filter(function(obj){
+                    return obj.producer.toLowerCase().indexOf(filter.value.toLowerCase())>-1;
+                });
+            }
+            reverseSelect(tempArray);
+            clearCon1();
+            tempArray.forEach(filterBuild);
+        }
+        if (selector.children[2].selected == true){
+            console.log("year selected");
+            movieArray.sort(sortYear);
+            tempArray = movieArray.slice(0);
+            if (filter.value != ""){
+                tempArray = tempArray.filter(function(obj){
+                    return obj.year.indexOf(filter.value)>-1;
+                });
+            }
+            tempArray.reverse();
+            reverseSelect(tempArray);
+            clearCon1();
+            tempArray.forEach(filterBuild);
+        }
+    })
+    
+    let clearCon1 = function(){
+        con1.innerHTML = "";
+    }
+    let reverseSelect = function(array){
+        let dirSelector = document.getElementsByTagName("select")[1];
+        if (dirSelector.children[1].selected == true){
+            array.reverse();
+        }
+    }
+    
+    let sortTitle = function(first, second){
+        if (first.title.toLowerCase() < second.title.toLowerCase()){
+            return -1;
+        }
+        if (first.title.toLowerCase() > second.title.toLowerCase()){
+            return 1;
+        }
+        return 0;
+    }
+    
+    let sortProducer = function(first, second){
+        if (first.producer.toLowerCase() < second.producer.toLowerCase()){
+            return -1;
+        }
+        if (first.producer.toLowerCase() > second.producer.toLowerCase()){
+            return 1;
+        }
+        return 0;
+    }
+    
+    let sortYear = function(first, second){
+        return first.year - second.year;
+    }
+    
+    inBtn.addEventListener("click", function(target){
+        let title = document.getElementById("inTitle");
+        let producer = document.getElementById("inProducer");
+        let year = document.getElementById("inYear");
+        if (isNaN(year.value) == true){
+            year.value = "Not a number";
+            return;
+        }
+        let movie = {
+            title: title.value,
+            producer: producer.value,
+            year: year.value,
+        }
+        let movieSent = db.ref("/").push(movie);
+        db.ref(movieSent.key + "/id").set(movieSent.key);
+        console.log(movieArray);
+    })
+    
+    db.ref("/").once("value", function(snapshot){
+        let allData = snapshot.val();
+        movieArray.shift();
+        for (movie in allData){
+            createEntry(allData[movie], movie);
+        }
+        movieArray.sort(sortTitle);
+        movieArray.forEach(filterBuild);
+        tempArray = movieArray.slice(0);
+        //print all objects 
+    })
+    db.ref("/").limitToLast(1).on("child_added", function(snapshot){
+        let allData = snapshot.val();
+        createEntry(allData, snapshot.key);
+        
+    })
+    let createEntry = function(allData, snapKey){
+        let movie = document.createElement("div");
+        let title = document.createElement("div");
+        let producer = document.createElement("div");
+        let year = document.createElement("div");
+        let edit = document.createElement("button");
+        let remove = document.createElement("button");
+        let movieObject = {
+            title: allData.title,
+            producer: allData.producer,
+            year: allData.year,
+            id: snapKey,
+        }
+        movieArray.push(movieObject);
+    }
+    
+    let filterBuild = function(variable){
+        let movie = document.createElement("div");
+        let title = document.createElement("div");
+        let producer = document.createElement("div");
+        let year = document.createElement("div");
+        let edit = document.createElement("button");
+        let remove = document.createElement("button");
+        movie.className = "movieDiv";
+        title.className = "titleDiv";
+        producer.className = "producerDiv";
+        year.className = "yearDiv";
+        edit.className = "editBtn";
+        remove.className = "removeBtn";
+        title.innerText = variable.title;
+        producer.innerText = variable.producer;
+        year.innerText = variable.year;
+        edit.innerText = "Edit";
+        remove.innerText = "Remove";
+        if (con1.children.length >= 5) {
+            return;
+        }
+        movie.setAttribute("id", variable.id);
+        movie.appendChild(title);
+        movie.appendChild(producer);
+        movie.appendChild(year);
+        movie.appendChild(edit);
+        movie.appendChild(remove);
+        con1.append(movie);
+        remove.addEventListener("click", function(event){
+            let eleList = document.getElementsByClassName("con1")[0];
+            for(i = 0; i < eleList.children.length; i++){
+                if (eleList.children[i].id == event.path[1].id){
+                    var position = movieArray.map(function(target){
+                        return target.id;
+                    }).indexOf(eleList.children[i].id);
+                    movieArray.splice(position, 1);
+                    console.log(movieArray);
+                    console.log(eleList.children[i].id);
+                    console.log(position);
+                    eleList.removeChild(eleList.children[i]);
+                }
+            }
+        })
+        edit.addEventListener("click", function(event){
+            let editor = document.getElementsByClassName("edit")[0];
+            editor.style.visibility = "visible";
+            let key = event.path[1].id;
+            console.log(key);
+            editor.children[3].addEventListener("click", function(event){
+                editor.style.visibility = "hidden";
+                db.ref("/" + key + "/title").set(editor.children[0].value);
+                db.ref("/" + key + "/producer").set(editor.children[1].value);
+                db.ref("/" + key + "/year").set(editor.children[2].value);
+            })
+        })
+    }
+    /*db.ref("/").on("child_changed", function(snapshot){
+        let cont = document.getElementsByClassName("con1")[0].children;
+        for (element in cont){
+            if (cont[element].title == snapshot.val().id){
+                cont[element].getElementsByClassName("titleDiv")[0].innerText = snapshot.val().title;
+                cont[element].getElementsByClassName("producerDiv")[0].innerText = snapshot.val().producer;
+                cont[element].getElementsByClassName("yearDiv")[0].innerText = snapshot.val().year;
+            }
+        }
+    })*/
+        pages.children[0].addEventListener("click", function(){
+        let filterArray = tempArray.slice(0);
+        console.log(tempArray);
+        clearCon1();
+        filterArray = filterArray.splice(0, 5);
+        filterArray.forEach(filterBuild);
+    })
+    pages.children[1].addEventListener("click", function(){
+        let filterArray = tempArray.slice(0);
+        console.log(tempArray);
+        clearCon1();
+        filterArray = filterArray.splice(5, 5);
+        filterArray.forEach(filterBuild);
+    })
+    pages.children[2].addEventListener("click", function(){
+        let filterArray = tempArray.slice(0);
+        console.log(tempArray);
+        clearCon1();
+        filterArray = filterArray.splice(10, 5);
+        filterArray.forEach(filterBuild);
+    })
+    pages.children[3].addEventListener("click", function(){
+        let filterArray = tempArray;
+        console.log(tempArray);
+        clearCon1();
+        filterArray = filterArray.splice(15, 5);
+        filterArray.forEach(filterBuild);
+    })
+    pages.children[4].addEventListener("click", function(){
+        let filterArray = tempArray.slice(0);
+        console.log(tempArray);
+        clearCon1();
+        filterArray = filterArray.splice(20, 5);
+        filterArray.forEach(filterBuild);
+    })
+    pages.children[5].addEventListener("click", function(){
+        let filterArray = tempArray.slice(0);
+        console.log(tempArray);
+        clearCon1();
+        filterArray = filterArray.splice(25, 5);
+        filterArray.forEach(filterBuild);
+    })
+</script>
+</body>
+</html>

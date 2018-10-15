@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    
+</style>
+</head>
+<body>
+<button id = "btn">Let it flow</button>
+<div id = "res">Out, I mean</div>
+<ul>
+    <li>First</li>
+    <li>Second</li>
+</ul>
+<script>
+    let btn = document.getElementById("btn");
+    let divv = document.getElementById("res");
+    let list = document.getElementsByTagName("ul")[0];
+    btn.addEventListener("click", function(event){
+        var cList = list.childNodes;
+        divv.innerHTML = cList.length;
+        for (i = 0; i < cList.length; i++){
+            divv.innerHTML += " " + cList[i].nodeName;
+            cList[i].innerHTML += "!";
+        }
+    })
+</script>
+</body>
+</html>

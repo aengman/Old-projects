@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    
+</style>
+</head>
+<body>
+    <textarea cols = 35 rows = 2></textarea>
+<div class = "res"> Results Here </div>
+
+<script>
+    let area = document.getElementsByTagName("textarea")[0];
+    let divv = document.getElementsByClassName("res")[0];
+    area.addEventListener("keydown", function(event){
+        divv.innerHTML = event.key;
+    })
+</script>
+</body>
+</html>

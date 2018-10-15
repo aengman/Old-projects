@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    .hanger {
+        border: black solid 1px;
+    }
+</style>
+</head>
+<body>
+    <button id = btn> Cricket </button>
+    <section> Texter</section>
+    <section> Texters</section>
+
+<script>
+    let button = document.getElementById("btn");
+    let sec = document.getElementsByTagName("section");
+    button.addEventListener("click", function(event){
+        for (i = 0; i < sec.length; i++){
+            sec[i].className = "hanger";
+        }
+    })
+</script>
+</body>
+</html>

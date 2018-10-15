@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCC6lkhk7fljLhUUPl5FLDEbTutOpclKnY",
+    authDomain: "demolition-38d2b.firebaseapp.com",
+    databaseURL: "https://demolition-38d2b.firebaseio.com",
+    projectId: "demolition-38d2b",
+    storageBucket: "",
+    messagingSenderId: "451483860928"
+  };
+  firebase.initializeApp(config);
+</script>
+</head>
+<body>
+<input type = "text" class = "fir" placeholder="Name">
+<input type = "text" class = "sec" placeholder="Wing Span">
+<input type = "text" class = "thi" placeholder="Feed">
+<button class = "btn"> ENGAGE </button>
+<ul>
+    <li>Content</li>
+</ul>
+<input type = "text" class = "search2" placeholder = "direction">
+<input type = "text" class = "fir2" placeholder="Name">
+<input type = "text" class = "sec2" placeholder="Wing Span">
+<input type = "text" class = "thi2" placeholder="Feed">
+<button class = "btn2"> ENGAGE... again </button>
+    
+<script>
+    let btn = document.getElementsByClassName("btn")[0];
+    let btn2 = document.getElementsByClassName("btn2")[0];
+    let db = firebase.database();
+    
+    btn.addEventListener("click", function(){
+        let fir = document.getElementsByClassName("fir")[0];
+        let sec = document.getElementsByClassName("sec")[0];
+        let thi = document.getElementsByClassName("thi")[0];
+        let bird = {
+            Name: fir.value,
+            Wingspan: sec.value,
+            Feed: thi.value
+        }
+        db.ref("Birds/").push(bird)
+    });
+    db.ref("/Birds").on("value", function(snapshot){
+        let allData = snapshot.val();
+        for (let bird in allData){
+            console.log(allData);
+            console.log(bird);
+            let dt = allData[bird];
+            let store = document.getElementsByTagName("ul")[0];
+            let list = document.createElement("ul");
+            let item = document.createElement("li");
+            item.innerHTML =dt.Name + " " + dt.Wingspan + " " + dt.Feed;
+            list.appendChild(item);
+            store.appendChild(list);
+        }
+    });
+    btn2.addEventListener("click", function(){
+        let fir = document.getElementsByClassName("fir2")[0];
+        let sec = document.getElementsByClassName("sec2")[0];
+        let thi = document.getElementsByClassName("thi2")[0];
+        let sea = document.getElementsByClassName("search2")[0];
+        let bird = {
+            Name: fir.value,
+            Wingspan: sec.value,
+            Feed: thi.value
+        }
+        db.ref(sea.value).set(bird)
+    });
+</script>
+</body>
+</html>

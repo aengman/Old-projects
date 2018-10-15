@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    
+</style>
+</head>
+<body>
+
+
+<script>
+    class Vehicle {
+    constructor(passengers, mSpeed, wheelCount){
+    this.passengers = passengers;
+    this.mSpeed = mSpeed;
+    this.wheelCount = wheelCount;
+    }
+    currentSpeed(cSpeed){
+    console.log(cSpeed)
+    }
+    }
+    class Boat extends Vehicle {
+    constructor(mDepth){
+    super(2, 30, 0);
+    this.mDepth = mDepth;
+    }
+    }
+    class Car extends Vehicle {
+    constructor(gasType){
+    super(5, 80, 4);
+    this.gasType = gasType;
+    }
+    }
+</script>
+</body>
+</html>

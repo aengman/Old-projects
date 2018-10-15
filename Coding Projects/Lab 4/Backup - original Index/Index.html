@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Lab 4</title>  
+<style>
+    body {
+        background-image: url("https://image.redbull.com/rbcom/010/2015-07-27/1331737542701_2/0010/1/1500/1000/1/moon-hill-natural-bridge-in-china.jpg");
+        background-size: cover;
+    }
+    body * {
+        margin: 10px;
+        background-color: RGB(50, 200, 100, 0.8);
+        border-radius: 20px;
+    }
+    input {
+        display: block;
+    }
+    .errBox{
+        position: absolute;
+        top: 0px;
+        right: 7px;
+        max-height: 100%;
+    }
+    #errDiv > div {
+        font-size: 0.7em;
+        margin: 2px;
+        max-width: 200px;
+    }
+    #disBtn {
+        float: right;
+    }
+    .keyBox {
+        display: flex;
+        flex-direction: column;
+        width: 200px;
+        text-align: center;
+    }
+    .addBox {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        align-items: center;
+    }
+    #addBtn{
+        width: 50%;
+        height: 40px;
+    }
+    .addInp {
+        width: 90%;
+        text-align: center;
+        background-color: white;
+    }
+    button {
+        border-radius: 20px;
+        box-shadow: 2px 2px 1px;
+        background-image: url("https://cdn-images-1.medium.com/max/1920/1*AcYLHh0_ve4TNRi6HLFcPA.jpeg");
+        background-size: cover;
+        text-shadow: 0px 0px 2px white;
+    }
+    button:hover {
+        box-shadow: 0px 0px 5px 2px orange;
+    }
+    .errBox{
+        border-radius: 20px;
+    }
+    .dataBox {
+        display: inline-flex;
+        flex-direction: column;
+    }
+    #viewBtn {
+        width: 100px;
+    }
+</style>
+</head>
+<body>
+    <div class = "keyBox">
+        <button id = "keyBtn"> Request API key</button>
+        <div id = "keyRes"> Key to be displayed here </div>
+    </div>
+    <div class = "addBox">
+        <button id = "addBtn"> Add data to base </button>
+        <input type = "text" id = "title" placeholder = "Title" class = "addInp">
+        <input type = "text" id = "author" placeholder = "Author" class = "addInp">
+        
+    </div>
+    <div class = "dataBox">
+        <button id = "viewBtn"> View all data </button>
+        <div id = "dataList">
+            <p> Data here </p>
+        </div>
+    </div>
+    <div class = "errBox">
+        <button id = "disBtn">Error list</button>
+        <div id = "errDiv">
+        Errors: 0
+        </div>
+    </div>
+    
+<script>
+    let errorCount = 0;
+    let keyBtn = document.getElementById("keyBtn");
+    let keyRes = document.getElementById("keyRes");
+    let addBtn = document.getElementById("addBtn");
+    let viewBtn = document.getElementById("viewBtn");
+    let dataList = document.getElementById("dataList");
+    let key = "";
+    let bURL = "https://www.forverkliga.se/JavaScript/api/crud.php";
+    let errDiv = document.getElementById("errDiv");
+    let disBtn = document.getElementById("disBtn");
+    function error (object){
+        errorCount += 1;
+        var newDiv = document.createElement("div");
+        newDiv.innerHTML = "Error Message: " + object.message;
+        errDiv.childNodes[0].nodeValue = "Errors: " + errorCount;
+        errDiv.appendChild(newDiv);
+        
+    }
+    function check(){
+        if (key === ""){
+            return keyCall();
+        }
+    }
+    class MakeBook {
+        constructor(title, author){
+            this.title = title;
+            this.author = author;
+            // The class doesn't seem practical to use in this specific code, I needed to get the input values anyway, so it's unused atm.
+        }
+    }
+    function displayErrors (event){
+        var errDiv = document.getElementById("errDiv");
+        if (errDiv.style.display === "none"){
+            errDiv.style.display = "";   
+        }
+        else if (errDiv.style.display === ""){
+            errDiv.style.display = "none";
+        }
+        else {
+            console.log("Some kind of error message, what in the world did you do?");
+        }
+    }
+    function keyCall (event){
+        if (key === ""){
+                keyBtn.disabled = true;
+        };
+        fetch(bURL + "?requestKey")
+        .then(function(result){
+            return result.json();
+        })
+        .then(function(object){
+            console.log(object);
+            keyRes.innerHTML = "Your key: " + object.key;
+            key = object.key;
+        })
+        .catch(function(errMessage){
+            error(errMessage);
+            keyCall(); 
+        })
+    }
+    function addCall (event){
+        check();
+        var inputTitle = document.getElementById("title");
+        var inputAuthor = document.getElementById("author");
+        var vURL = bURL + "?key=" + key + "&op=insert" + "&title=" + inputTitle.value + "&author=" + inputAuthor.value;
+        fetch(vURL)
+        .then(function(response){
+                return response.json();
+        })
+        .then(function(object){
+            if (object.status == "error"){
+                error(object);
+                addCall();
+            }
+            console.log(object)
+        })
+    }
+    function viewCall(event){
+        check();
+        var vURL = bURL + "?key=" + key +"&op=select";
+        fetch(vURL)
+        .then(function(response){
+            return response.json();
+        })
+        .then(function(object){
+            if (object.status == "error"){
+                error(object);
+                return viewCall();
+            }
+            while (dataList.children.length > 0){
+                    dataList.removeChild(dataList.lastChild);
+            };
+            (object.data).forEach(function(element){
+                var p = document.createElement("p");
+                p.innerHTML = "Id: " + element.id + ": Title: " + element.title + ", Author: " + element.author;
+                console.log(element);
+                dataList.appendChild(p);
+            });
+            if (object.data.length === 0){
+                dataList.innerHTML = "No data to display";
+            }
+            else {
+                dataList.childNodes[0].nodeValue = "";
+            }
+            console.log(object);
+        })
+    }
+    keyBtn.addEventListener("click", keyCall);
+    addBtn.addEventListener("click", addCall);
+    viewBtn.addEventListener("click", viewCall);
+    disBtn.addEventListener("click", displayErrors);
+    //Gathering all the functions and declarations on the top
+</script>
+</body>
+</html>

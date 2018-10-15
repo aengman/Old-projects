@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Third charm</title>   
+
+<style>
+    textarea {
+        display:block;
+    }
+    .table {
+        display:table;
+    }
+    .table-row {
+        display: table-row;
+    }
+    .td, .th {
+        display: table-cell;
+        border: solid 1px black;
+        text-align: center;
+        padding: 5px;
+    }
+</style>
+</head>
+<body>
+
+    <button id = "btn"> Ingles </button>
+    <textarea rows = "3" cols = "35" placeholder = "Write querystring"></textarea>
+    <div class = "res"> Results </div>
+    <input type = "radio" name = "type" id = "World"/>
+    <label for = "World">World</label>
+    <input type = "radio" name = "type" id = "Key"/>
+    <label for = "Key">Key</label>
+    
+    <div class = "table">
+        TABLE
+        <div class = "table-row">Country:
+        </div>
+        <div class = "table-row">Continent:
+        </div>
+         <div class = "table-row">Population:
+        </div>
+         <div class = "table-row">pFemale:
+        </div>
+    </div>
+<script>
+    let btn = document.getElementById("btn");
+    let area = document.getElementsByTagName("textarea")[0];
+    let divv = document.getElementsByClassName("res")[0];
+    let rad = document.getElementsByTagName("input");
+    let tr = document.getElementsByClassName("table-row");
+    function makeDiv (){
+        return document.createElement("div");
+    };
+    /*
+    let row = list.map( c => c.name ).map( name => '<div>'+name+'</div>').reduce...
+    */
+    function tablify(list){
+        list.forEach(function(obj){
+            let childArray = [];
+            for (i = 0; i < 4; i++){
+                childArray[i] = makeDiv();
+                    if (i == 0){ childArray[i].appendChild(document.createTextNode(obj.name))
+                    }
+                    else if (i == 1){ childArray[i].appendChild(document.createTextNode(obj.continent))
+                    }
+                    else if (i == 2){ childArray[i].appendChild(document.createTextNode(obj.population))
+                    }
+                    else if (i == 3){ childArray[i].appendChild(document.createTextNode(obj.pFemale))
+                    }
+                    else {
+                    return "failure";
+                    }
+                childArray[i].className = "td";
+                tr[i].appendChild(childArray[i]);
+            }
+    })
+    }
+    function call (vari) {
+        var area = document.getElementsByTagName("textarea")[0];
+        let vURL = "https://forverkliga.se/JavaScript/api/simple.php" + area.value;
+        fetch(vURL)
+        .then(function(res){
+            return res.json();
+        })
+        .then(function(object){
+            divv.innerHTML = object;
+            if (area.value == "?world"){
+            tablify(object);
+        };
+        })
+    };
+    btn.addEventListener("click", call);
+    rad[0].addEventListener("change", function(event){
+        area.value = "?world"
+    });
+    rad[1].addEventListener("change", function(event){
+        area.value = "?key=value"
+    });
+    
+</script>
+</body>
+</html>

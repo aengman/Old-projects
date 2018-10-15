@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Third charm</title>   
+
+<style>
+    textarea {
+        display:block;
+    }
+</style>
+</head>
+<body>
+
+    <button id = "btn"> Ingles </button>
+    <textarea rows = "3" cols = "35" placeholder = "Write querystring"></textarea>
+    <div class = "res"> Results </div>
+    <input type = "radio" name = "type" id = "World"/>
+    <label for = "World">World</label>
+    <input type = "radio" name = "type" id = "Key"/>
+    <label for = "Key">Key</label>
+<script>
+    let btn = document.getElementById("btn");
+    let area = document.getElementsByTagName("textarea")[0];
+    let divv = document.getElementsByClassName("res")[0];
+    let rad = document.getElementsByTagName("input");
+    function call (vari) {
+        var area = document.getElementsByTagName("textarea")[0];
+        let vURL = "https://forverkliga.se/JavaScript/api/simple.php" + area.value;
+        fetch(vURL)
+        .then(function(res){
+            return res.json();
+        })
+        .then(function(object){
+            divv.innerHTML = object;
+        })
+    };
+    btn.addEventListener("click", call);
+    rad[0].addEventListener("click", function(event){
+        area.value = "?world"
+    });
+    rad[1].addEventListener("click", function(event){
+        area.value = "?key=value"
+    });
+    
+</script>
+</body>
+</html>

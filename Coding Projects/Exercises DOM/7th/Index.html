@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    
+</style>
+</head>
+<body>
+<button id = "btn">Destruction!</button>
+<div id = "res">Ore wa zombi-ssu</div>
+
+<script>
+    let divv = document.getElementById("res");
+    let button = document.getElementById("btn");
+    button.addEventListener("click", function(event){
+        if (divv.style.display == "none"){
+        var divClone = document.createElement("div");
+            divClone.innerHTML = "Ore wa Zombi-ssu";
+            divClone.setAttribute("id", "res");
+            document.body.appendChild(divClone);
+        divv.style.display = "";
+        }
+        else {
+            divv.style.display = "none";
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    
+</style>
+</head>
+<body>
+<textarea cols = "35" rows = "3"></textarea>
+
+<script>
+    let area = document.getElementsByTagName("textarea")[0];
+    area.addEventListener("keyup", function(event){
+        var aVal = area.value.toUpperCase();
+        area.value = aVal;
+    })
+</script>
+</body>
+</html>

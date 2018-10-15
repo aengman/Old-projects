@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    
+</style>
+</head>
+<body>
+<button id = "btn">Cricket</button>
+<ul>
+<li>First</li>  
+<li>Second</li>
+<li>Third</li>
+</ul>
+<ul>
+<li>Fourth</li> 
+<li>Fifth</li>
+</ul>
+<script>
+let lists = document.getElementsByTagName("ul");
+    let btn = document.getElementById("btn");
+    function call (event){
+        var chill = lists[0].children[0];
+        lists[0].removeChild(chill);
+        lists[1].appendChild(chill);
+    }
+    btn.addEventListener("click", call);
+</script>
+</body>
+</html>

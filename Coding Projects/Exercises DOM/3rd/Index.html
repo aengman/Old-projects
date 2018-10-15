@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    .multiply {
+        border: darkblue solid 2px;
+        padding: 5px;
+        display: inline;
+    }
+</style>
+</head>
+<body>
+<button id = "btn">Cricket</button>
+    <div class = "multiply">Kuriboh</div>
+    <div class = "multiply">Infinite</div>
+    <div class = "multiply">Stop</div>
+    <div class = "multiply">Blue eyes</div>
+    
+<script>
+    let button = document.getElementById("btn");
+    let multiDiv = document.getElementsByClassName("multiply");
+    let tapped = false;
+    function textChange (event){
+        for (i = 0; i < multiDiv.length; i++){
+            if (tapped == false){
+            multiDiv[i].innerHTML = "Hacked";
+            if (i == 3){
+                tapped = true;
+            }
+            }
+            else {
+                multiDiv[i].innerHTML = "re-acted";
+                    if (i == 3){
+                        tapped = false;
+                    }
+            }
+        }
+    }
+    button.addEventListener("click", textChange);
+</script>
+</body>
+</html>

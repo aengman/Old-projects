@@ -1,0 +1,38 @@
+<!DOCTYPE>
+<html>
+<head>
+    <title>Ex</title>
+    <style>
+        textarea {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <button id = btn> Detail </button>
+    <textarea rows = "1" cols = "35" placeholder = "Write queries"></textarea>
+    <div id = "res"> Display </div>
+    
+<script>
+    let vURL = "https://pixabay.com/api/" + "?key=7297160-c427a0afcd3fe852de0fbd072";
+    let divv = document.getElementById("res");
+    let btn = document.getElementById("btn");
+    let area = document.getElementsByTagName("textarea")[0];
+    let counter = 0;
+    btn.addEventListener("click", function(){
+    vURL += area.value;
+    fetch(vURL)
+    .then(function(base){
+    return base.json();
+    })
+    .then(function(object){
+    /*var img = document.createElement("img");
+    var oURL = URL.createObjectURL(object);
+    img.src = oURL;
+    divv.appendChild(img);*/
+        divv.innerHTML = object.hits;
+    })
+    })
+</script>    
+</body>
+</html>

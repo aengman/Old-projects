@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    .madeYouGreen{
+        background-color: green;
+    }
+    .madeYouRed{
+        background-color: red;
+    }
+</style>
+</head>
+<body>
+<button id = "bOne"> Ash </button>
+    <input type = "checkbox" id = "c1"> 
+    <label for = "c1">Boff</label>
+<button id = "bTwo"> Blood </button>
+   <input type = "checkbox" id = "c2">
+     <label for = "c2">B2off</label>
+    <div id = "unto"> Don't make me green </div>
+<script>
+    let bt1 = document.getElementById("bOne");
+    let bt2 = document.getElementById("bTwo");
+    let checks = document.getElementsByTagName("input");
+    let labels = document.getElementsByTagName("label");
+    function greenify(){
+        document.querySelector("#unto").className = "madeYouGreen";
+        labels[0].innerText = "It's so-so?"
+    }
+    function reddify(){
+        document.querySelector("#unto").className = "madeYouRed";
+        labels[1].innerText = "It's ON";
+    }
+    function activator (event){
+        if (event.target == checks[0] && checks[0].checked == true){
+            bt1.addEventListener("click", greenify)
+        }
+        else if (event.target == checks[0] && checks[0].checked == false){
+            bt1.removeEventListener("click", greenify);
+        }
+        if (event.target == checks[1] && checks[1].checked == true){
+            bt2.addEventListener("click", reddify)
+        }
+        else if (event.target == checks[1] && checks[1].checked == false){
+            bt2.removeEventListener("click", reddify);
+        }
+        
+    }
+    checks[0].addEventListener("change", activator);
+    checks[1].addEventListener("change", activator);
+</script>
+</body>
+</html>

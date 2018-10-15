@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    textarea {
+        display: block;
+    }
+</style>
+</head>
+<body>
+<button id = "btn">Cricket</button>
+    <textarea cols = "35" rows = "3">?register=true&name=AlbinEngman</textarea>
+    <div class = "res"> Results </div>
+
+<script>
+    let btn = document.getElementById("btn");
+    let area = document.getElementsByTagName("textarea")[0];
+    let divv = document.getElementsByClassName("res")[0];
+    function xCall(event){
+        var area = document.getElementsByTagName("textarea")[0];
+        let req = new XMLHttpRequest;
+    let vURL = "http://forverkliga.se/JavaScript/api/ajax-lab.php" + area.value;
+        console.log(vURL);
+    req.open("get", vURL);
+    req.send();
+        req.onreadystatechange = function(){
+            if (req.status === 200 && req.readyState === 4){
+                divv.innerHTML = req.response;
+            }
+        }
+    }
+    btn.addEventListener("click", xCall);
+</script>
+</body>
+</html>

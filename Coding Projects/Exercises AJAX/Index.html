@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Ex </title>
+<style>
+    
+</style>
+</head>
+<body>
+<button id = "btn">Cricket</button>
+<div id = "divv"> Results </div>
+<textarea cols = "35" rows = "2"></textarea>
+<ul>
+<li> Storage</li>
+</ul>
+<script>
+    let btn = document.getElementById("btn");
+    let divv = document.getElementById("divv");
+    let list = document.getElementsByTagName("ul")[0];
+    let area = document.getElementsByTagName("textarea")[0];
+    function call (event){
+        var area = document.getElementsByTagName("textarea")[0];
+        let req = new XMLHttpRequest;
+        req.onreadystatechange = function (event){
+            if (req.readyState == 4 && req.status == 200){
+                divv.innerHTML = req.responseText;
+                var newLi = document.createElement("li");
+                newLi.innerHTML = divv.innerHTML;
+                list.appendChild(newLi);
+            }
+            
+        }
+        let vURL = "http://mardby.se/AJK15G/lorem_text.php?numberOfWords=" + area.value;
+        req.open("get", vURL);
+        req.send();
+    }
+    btn.addEventListener("click", call);
+</script>
+</body>
+</html>
